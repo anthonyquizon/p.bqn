@@ -14,11 +14,13 @@ r←•MakeRand 10
 gr←2 ⋄ gl←1.5⋄ sr←1⋄ sl←0.9 # sl: length shrink factor, gr: range factor, rs: shrink range factor, gl: length factor
 
 _P←{ F _𝕣 𝕩:
-  v←@⋄rs←1⋄i←0 ⋄ t←⍉>⟨gr⋆↕10, ⌊gl⋆↕10⟩ # rs: result
+  v←@⋄rs←1⋄i←0 ⋄ t←⍉>⟨0∾gr⋆↕10, 0∾⌊gl⋆↕10⟩ # rs: result
 
+  •Show t
   # grow
   {𝕊: 
     x‿y←i⊏t ⋄ i↩i+1 ⋄ l‿h←x×¯1‿1
+    •SHow y
     (i<≠t)∧rs↩F v↩l+y r.Range 1+h-l
   } •_while_ (0⊸≢) @
 
@@ -31,11 +33,7 @@ _P←{ F _𝕣 𝕩:
   } •_while_ {(0≢𝕩)∧¬rs} @
 }
 
-{ 𝕊:
-  •SHow 4||𝕩
-  10>≠|𝕩
-} _P @
-
+{ 𝕊: •SHow 4||𝕩 ⋄ 10>≠|𝕩 } _P @
 
 #¯1‿1 P 4
 #¯5‿5 P 5
