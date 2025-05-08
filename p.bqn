@@ -1,29 +1,53 @@
-# TODO for all imports
+•Show "--"
+r←•MakeRand 10
 
-preproc_out←"PREPROC_OUT←{ f 𝕊 v: •Out f ⋄ •Show v }"
-Proc←{ f 𝕊 c:
-  n←r←@ 
-  c↩c/˜0=+`c='#' # remove comment sections
-  c↩c/˜¬c∊" "    # remove whitespace
-  a←c∊'a'+↕26    #.
-  b←c∊"←↩"       #.
-  r↩a∧1+`<⟜«a    # extract names
-  n↩1↓c⊔˜r
+# TODO growth range size
+# TODO growth length size
+# TODO growth range limit
+# TODO growth length limit
 
-  n↩{'"'∾𝕩∾" "∾f∾'"'∾" PREPROC_OUT " ∾ 𝕩 }¨n
-  s←∾"⋄"⊸∾¨n
-  s∾˜⊑𝕩⊔˜+`𝕩='#' 
+# 𝕨 Q 𝔾 𝕩 → 𝕨: range, 𝕩: length
+#Q_←{
+#  
+#}
+
+gr←2 ⋄ gl←1.5⋄ sr←1⋄ sl←0.9 # sl: length shrink factor, gr: range factor, rs: shrink range factor, gl: length factor
+
+_P←{ F _𝕣 𝕩:
+  v←@⋄rs←1⋄i←0 ⋄ t←⍉>⟨gr⋆↕10, ⌊gl⋆↕10⟩ # rs: result
+
+  # grow
+  {𝕊: 
+    x‿y←i⊏t ⋄ i↩i+1 ⋄ l‿h←x×¯1‿1
+    (i<≠t)∧rs↩F v↩l+y r.Range 1+h-l
+  } •_while_ (0⊸≢) @
+
+  j←10 # max tries
+  # shrink
+  {𝕊:
+    v {𝕩↑˜⌊sl×≠𝕩}⍟(0.5<(r.Range 0)⋆1.2) ↩
+    v {(⊣-sr⊸×∘×)⌾((⊑⍒|𝕩)⊸⊏) 𝕩}⍟(0⊸≠≠) ↩ # shrink lagrest delta from 0
+    (j-⟜1↩)∧(F v)
+  } •_while_ {(0≢𝕩)∧¬rs} @
 }
 
-f←⊑•args
-out←("_out/"∾f)
-•SH "mkdir"‿"-p"‿"_out"
-l←•FLines f
-m←∨´¨∊⟜"#."¨l
-fn←(f∾":")⊸∾¨•Fmt¨↕≠l
+{ 𝕊:
+  •SHow 4||𝕩
+  10>≠|𝕩
+} _P @
 
-o←fn Proc¨⌾(m⊸/) l
-out •Flines ⟨preproc_out⟩ ∾ o
 
-•Out out
-
+#¯1‿1 P 4
+#¯5‿5 P 5
+#¯10‿10 P 6
+#¯20‿20 P 7
+#¯15‿15 P 8
+#10‿13 P 4
+#10‿13 P 4
+#10‿13 P 4
+#10‿13 P 4
+#10‿13 P 4
+#10‿13 P 4
+#10‿13 P 4
+#10‿13 P 4
+#10‿13 P 4
